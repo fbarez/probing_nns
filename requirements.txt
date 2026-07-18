@@ -1,0 +1,6 @@
+transformers>=4.30
+torch>=2.0
+scikit-learn>=1.2
+datasets>=2.10
+matplotlib>=3.5
+numpy
