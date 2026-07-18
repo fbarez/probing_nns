@@ -1,48 +1,62 @@
-# Probing Neural Networks — hands-on tutorial
+<h1 align="center">Probing Neural Networks</h1>
 
-A hands-on companion to the OXML Summer School 2026 lecture **“Probing Neural Networks”**
-(slides: [`OXML_Summer_School_2026_Lecture.pdf`](OXML_Summer_School_2026_Lecture.pdf)).
+<p align="center">
+  A hands-on tutorial on reading concepts out of a language model’s internal representations.<br>
+  Companion to the OXML Summer School 2026 lecture
+  <a href="OXML_Summer_School_2026_Lecture.pdf"><em>Probing Neural Networks</em></a>.
+</p>
 
-You build the whole probing toolkit on a real transformer (GPT-2), from scratch — and, more
-importantly, learn to **distrust your own probe**: baselines, **selectivity**, and the gap between a
-concept being *accessible* and the model actually *using* it.
+<p align="center">
+  <a href="https://colab.research.google.com/github/fbarez/probing_nns/blob/main/probing_tutorial.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open the tutorial in Colab"></a>
+  &nbsp;·&nbsp;
+  <a href="https://colab.research.google.com/github/fbarez/probing_nns/blob/main/probing_tutorial_solutions.ipynb">Solutions</a>
+</p>
 
-## Start here
+---
 
-| | open in Colab |
+You will build the probing toolkit on a real transformer (GPT-2), from scratch — and, just as
+importantly, learn to interrogate your own results. The difference between a careful probing study and
+a misleading one comes down to three things, and you will implement all of them: **baselines**,
+**selectivity**, and the gap between information a model makes *accessible* and information it actually
+*uses*.
+
+## Getting started
+
+Open **`probing_tutorial.ipynb`** in Colab (button above) and work through it top to bottom — no
+setup, no API keys, no gated models. Each exercise is a small gap to fill, marked `# ✏️ EXERCISE`, and
+is followed by a self-check that confirms your answer before you move on. Reach for the solutions only
+once you’ve tried.
+
+> Prefer local? `pip install -r requirements.txt`, then open the notebook in Jupyter. It runs on a
+> laptop CPU in a few minutes; a free Colab T4 GPU is faster.
+
+## What the tutorial covers
+
+The arc follows the lecture, but every idea becomes code you write and a result you have to interpret.
+
+| Section | You implement | The idea it teaches |
+|---|---|---|
+| **Representations** | mean-pooled frozen hidden states | a concept becomes a vector, `h ∈ ℝᵈ` |
+| **A linear probe** | logistic regression on `h` | is the concept a *direction*? |
+| **Layer profile** | a sweep over every layer | *where* a concept lives is a finding |
+| **Baselines & selectivity** | majority · random-representation · control task | why raw accuracy misleads |
+| **Linear vs. MLP** | a higher-capacity probe | a stronger probe can tell you *less* |
+| **Accessible ≠ used** | ablate the direction; steer the model | probing shows access; intervention shows use |
+| **Truthfulness / deception** | the same pipeline, pointed at honesty | the basis of real safety probes |
+| **Capstone** | your own study, honestly reported | the full method, end to end |
+
+## Contents
+
+| File | |
 |---|---|
-| **Tutorial** (fill in the exercises) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fbarez/probing_nns/blob/main/probing_tutorial.ipynb) |
-| **Solutions** (answers filled in) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fbarez/probing_nns/blob/main/probing_tutorial_solutions.ipynb) |
+| `probing_tutorial.ipynb` | the tutorial — exercises to complete |
+| `probing_tutorial_solutions.ipynb` | the same notebook with answers |
+| `OXML_Summer_School_2026_Lecture.pdf` | the lecture slides |
+| `requirements.txt` | dependencies |
 
-Work through **`probing_tutorial.ipynb`**. Cells marked `# ✏️ EXERCISE` have a piece missing
-(`raise NotImplementedError`) — fill it in, then run the **self-check** cell right after it. If it runs
-without an assertion error, you’ve got it. Peek at the solutions only when you’re stuck.
+## References
 
-Runs free on Colab (`Runtime → Change runtime type → T4 GPU`) or on a laptop CPU in a few minutes — no
-API keys, no gated models.
-
-## What you’ll build (mirrors the lecture)
-
-0. **Setup** — load a frozen GPT-2. *Only the probe learns.*
-1. **Data** — a concept with clean labels (sentiment).
-2. **Representations** *(Ex 1)* — mean-pool frozen hidden states into `h ∈ ℝᵈ`.
-3. **First linear probe** *(Ex 2)* — logistic regression on `h`.
-4. **Layer profile** *(Ex 3)* — probe every layer; the shape is a finding.
-5. **Baselines & selectivity** *(Ex 4)* — majority, random-representation, control task → **selectivity**.
-6. **Linear vs MLP** *(Ex 5)* — a stronger probe that tells you *less*.
-7. **Accessible ≠ used** *(Ex 6)* — ablate the concept direction; steer the running model.
-8. **The real thing** *(Ex 7)* — point the pipeline at truthfulness/deception (the basis of real
-   safety probes, e.g. Apollo Research’s deception probes).
-9. **Capstone** — design your own study and write the honest report.
-
-## Requirements
-
-`transformers`, `torch`, `scikit-learn`, `datasets`, `matplotlib` (see `requirements.txt`). On Colab
-they’re already installed; locally: `pip install -r requirements.txt`.
-
-## Further reading
-
-- The lecture slides in this repo.
+- The lecture slides in this repository.
 - Hewitt & Liang (2019), *Designing and Interpreting Probes with Control Tasks* — the selectivity idea.
 - Apollo Research (2025), *Detecting Strategic Deception Using Linear Probes*.
-- EleutherAI [`mdl`](https://github.com/EleutherAI/mdl) — minimum-description-length probing (§5, advanced).
+- EleutherAI [`mdl`](https://github.com/EleutherAI/mdl) — minimum-description-length probing.
